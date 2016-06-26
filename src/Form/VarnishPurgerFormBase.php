@@ -206,7 +206,9 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
       '#type' => 'details',
       '#group' => 'tabs',
       '#title' => $this->t('Headers'),
-      '#description' => $this->t('Configure the outbound HTTP headers, leave empty to delete.')
+      '#description' => $this->t('Configure the outbound HTTP headers, leave 
+      empty to delete. Example for Tag as Type: Purge-Cache-Tags for Header and 
+      [invalidation:expression] for Value.')
     ];
     $form['headers']['headers'] = [
       '#tree' => TRUE,
@@ -293,6 +295,7 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
+   * @return array
    */
   public function buildFormHeadersRebuild(array &$form, FormStateInterface $form_state) {
     return $form['headers']['headers'];
