@@ -91,7 +91,6 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
     $this->buildFormMetadata($form, $form_state, $settings);
     $this->buildFormRequest($form, $form_state, $settings);
     $this->buildFormHeaders($form, $form_state, $settings);
-    $this->buildFormBody($form, $form_state, $settings);
     $this->buildFormPerformance($form, $form_state, $settings);
     $this->buildFormTokensHelp($form, $form_state, $settings);
     $this->buildFormSuccessResolution($form, $form_state, $settings);
@@ -247,48 +246,6 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
   }
 
   /**
-   * Build the 'body' section of the form.
-   *
-   * @param array $form
-   *   An associative array containing the structure of the form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current state of the form.
-   * @param \Drupal\varnish_purger\Entity\VarnishPurgerSettings $settings
-   *   Configuration entity for the purger being configured.
-   */
-  public function buildFormBody(array &$form, FormStateInterface $form_state, VarnishPurgerSettings $settings) {
-    $form['bodytab'] = [
-      '#type' => 'details',
-      '#group' => 'tabs',
-      '#title' => $this->t('Body'),
-      '#description' => $this->t('You can send a HTTP body, when left unchecked, nothing will be sent.')
-    ];
-    $form['bodytab']['show_body_form'] = [
-      '#title' => $this->t('Send body payload'),
-      '#type' => 'checkbox',
-      '#default_value' => !($settings->body === ''),
-    ];
-    $form['bodytab']['body_form_wrapper'] = [
-      '#type' => 'fieldgroup',
-      '#states' => [
-        'visible' => [
-          ':input[name="show_body_form"]' => ['checked' => TRUE]
-        ]
-      ]
-    ];
-    $form['bodytab']['body_form_wrapper']['body_content_type'] = [
-      '#title' => $this->t('Content-Type'),
-      '#type' => 'textfield',
-      '#default_value' => $settings->body_content_type,
-    ];
-    $form['bodytab']['body_form_wrapper']['body'] = [
-      '#title' => $this->t('Body payload'),
-      '#type' => 'textarea',
-      '#default_value' => $settings->body,
-    ];
-  }
-
-  /**
    * Build the 'headers' section of the form: retrieves updated elements.
    *
    * @param array $form
@@ -420,7 +377,7 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
         '#type' => 'details',
         '#group' => 'tabs',
         '#title' => $this->t('Tokens'),
-        '#description' => $this->t('<p>Tokens are replaced for the <b>Path</b>, <b>Body payload</b> and header <b>Value</b> fields.</p>'),
+        '#description' => $this->t('<p>Tokens are replaced for the <b>Path</b> and header <b>Value</b> fields.</p>'),
       ];
       $form['tokens']['table'] = [
         '#type' => 'table',
@@ -499,10 +456,6 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
   public function submitFormSuccess(array &$form, FormStateInterface $form_state) {
     $settings = VarnishPurgerSettings::load($this->getId($form_state));
 
-    // Empty 'body' when 'show_body_form' isn't checked.
-    if ($form_state->getValue('show_body_form') === 0) {
-      $form_state->setValue('body', '');
-    }
 
     // Rewrite 'headers' so that it contains the exact right format for CMI.
     if (!is_null($submitted_headers = $form_state->getValue('headers'))) {
