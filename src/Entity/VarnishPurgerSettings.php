@@ -99,28 +99,6 @@ class VarnishPurgerSettings extends PurgerSettingsBase implements PurgerSettings
    */
   public $headers = [];
 
-  //
-  // Body (request payload):
-  //
-
-  /**
-   * The body payload to send.
-   *
-   * @var string
-   */
-  public $body = '';
-
-  /**
-   * The content-type of the body payload being sent.
-   *
-   * @var string
-   */
-  public $body_content_type = 'text/plain';
-
-  //
-  // Performance settings:
-  //
-
   /**
    * When FALSE, dynamic capacity calculation will be disabled and based upon
    * the connect_timeout and timeout settings.

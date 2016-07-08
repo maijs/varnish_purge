@@ -106,9 +106,6 @@ abstract class VarnishPurgerBase extends PurgerBase implements PurgerInterface {
   protected function getHeaders($token_data) {
     $headers = [];
     $headers['user-agent'] = 'varnish_purger module for Drupal 8.';
-    if (strlen($this->settings->body)) {
-      $headers['content-type'] = $this->settings->body_content_type;
-    }
     foreach ($this->settings->headers as $header) {
       // According to https://tools.ietf.org/html/rfc2616#section-4.2, header
       // names are case-insensitive. Therefore, to aid easy overrides by end
@@ -150,9 +147,6 @@ abstract class VarnishPurgerBase extends PurgerBase implements PurgerInterface {
       'timeout' => $this->settings->timeout,
       'headers' => $this->getHeaders($token_data),
     ];
-    if (strlen($this->settings->body)) {
-      $opt['body'] = $this->token->replace($this->settings->body, $token_data);
-    }
     if ($this->settings->scheme === 'https') {
       $opt['verify'] = $this->settings->verify;
     }
