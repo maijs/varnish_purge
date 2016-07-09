@@ -36,7 +36,7 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
    *
    * @var array
    */
-  protected $request_methods = ['BAN', 'GET', 'POST', 'HEAD', 'PUT', 'OPTIONS', 'PURGE', 'DELETE', 'TRACE', 'CONNECT'];
+  protected $request_methods = ['BAN', 'PURGE'];
 
   /**
    * Static listing of the possible connection schemes.
