@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\varnish_purger\Tests\VarnishPurgerFormTest.
- */
-
 namespace Drupal\varnish_purger\Tests;
 
 use Drupal\varnish_purger\Tests\VarnishPurgerFormTestBase;

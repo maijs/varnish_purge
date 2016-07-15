@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\varnish_purger\Plugin\Purge\Purger\VarnishPurgerBase.
- */
-
 namespace Drupal\varnish_purger\Plugin\Purge\Purger;
 
 use GuzzleHttp\ClientInterface;

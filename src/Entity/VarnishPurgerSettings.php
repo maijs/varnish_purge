@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\varnish_purger\Entity\VarnishPurgerSettings.
- */
-
 namespace Drupal\varnish_purger\Entity;
 
 use Drupal\purge\Plugin\Purge\Purger\PurgerSettingsBase;

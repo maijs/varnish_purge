@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\varnish_purger\Form\VarnishBundledPurgerForm.
- */
-
 namespace Drupal\varnish_purger\Form;
 
 use Drupal\varnish_purger\Form\VarnishPurgerFormBase;

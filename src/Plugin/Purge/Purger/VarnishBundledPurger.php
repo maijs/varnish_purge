@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\varnish_purger\Plugin\Purge\Purger\VarnishBundledPurger.
- */
-
 namespace Drupal\varnish_purger\Plugin\Purge\Purger;
 
 use Drupal\purge\Plugin\Purge\Purger\PurgerInterface;

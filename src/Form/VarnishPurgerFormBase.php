@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\varnish_purger\Form\VarnishPurgerFormBase.
- */
-
 namespace Drupal\varnish_purger\Form;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;

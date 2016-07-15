@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\varnish_purger\Plugin\Purge\DiagnosticCheck\ConfigurationCheck.
- */
-
 namespace Drupal\varnish_purger\Plugin\Purge\DiagnosticCheck;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
