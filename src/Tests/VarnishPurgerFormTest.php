@@ -9,7 +9,7 @@ use Drupal\varnish_purger\Tests\VarnishPurgerFormTestBase;
  *
  * @group varnish_purger
  */
-class HttpPurgerFormTest extends VarnishPurgerFormTestBase {
+class VarnishPurgerFormTest extends VarnishPurgerFormTestBase {
 
   /**
    * The full class of the form being tested.
