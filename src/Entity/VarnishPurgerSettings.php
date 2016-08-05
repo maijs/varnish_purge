@@ -10,6 +10,7 @@ use Drupal\purge\Plugin\Purge\Purger\PurgerSettingsInterface;
  *
  * @ConfigEntityType(
  *   id = "varnishpurgersettings",
+ *   label = @Translation("Varnish purger settings"),
  *   config_prefix = "settings",
  *   static_cache = TRUE,
  *   entity_keys = {"id" = "id"},
