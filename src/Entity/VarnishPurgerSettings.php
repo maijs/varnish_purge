@@ -146,4 +146,12 @@ class VarnishPurgerSettings extends PurgerSettingsBase implements PurgerSettings
    */
   public $http_errors = TRUE;
 
+
+  /**
+   * The form settings.
+   *
+   * @var array
+   */
+  public $settings= '';
+
 }

@@ -40,6 +40,15 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
    */
   protected $schemes = ['http', 'https'];
 
+
+  /**
+   * Group of token.
+   *
+   * @var array
+   */
+  protected $tokenGroups = '';
+
+
   /**
    * Constructs a \Drupal\varnish_purger\Form\ConfigurationForm object.
    *
