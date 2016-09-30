@@ -210,7 +210,7 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
       '#group' => 'tabs',
       '#title' => $this->t('Headers'),
       '#description' => $this->t('Configure the outbound HTTP headers, leave 
-      empty to delete. Example for Tag as Type: Purge-Cache-Tags for Header and 
+      empty to delete. Example for Tag as Type: Cache-Tags for Header and 
       [invalidation:expression] for Value.')
     ];
     $form['headers']['headers'] = [
