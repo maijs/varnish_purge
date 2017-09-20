@@ -473,11 +473,12 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
     }
 
     // Rewrite 'scheme' and 'request_method' to have the right CMI values.
-    if (!is_null($scheme = $form_state->getValue('scheme'))) {
-      $form_state->setValue('scheme', $this->schemes[$scheme]);
+    if ($scheme = $form_state->getValue('scheme') && in_array($scheme, $this->request_methods)) {
+      $form_state->setValue('scheme', $scheme);
     }
-    if (!is_null($method = $form_state->getValue('request_method'))) {
-      $form_state->setValue('request_method', $this->request_methods[$method]);
+
+    if ($method = $form_state->getValue('request_method') && in_array($method, $this->request_methods)) {
+      $form_state->setValue('request_method', $method);
     }
 
     // Iterate the config object and overwrite values found in the form state.
