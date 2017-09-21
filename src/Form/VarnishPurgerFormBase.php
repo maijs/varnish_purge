@@ -168,14 +168,14 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
     $form['request']['request_method'] = [
       '#title' => $this->t('Request Method'),
       '#type' => 'select',
-      '#default_value' => array_search($settings->request_method, $this->request_methods),
-      '#options' => $this->request_methods,
+      '#default_value' => $this->request_methods[(int) array_search($settings->request_method, $this->request_methods)],
+      '#options' => array_combine($this->request_methods, $this->request_methods),
     ];
     $form['request']['scheme'] = [
       '#title' => $this->t('Scheme'),
       '#type' => 'select',
-      '#default_value' => array_search($settings->scheme, $this->schemes),
-      '#options' => $this->schemes,
+      '#default_value' => $this->schemes[(int) array_search($settings->scheme, $this->schemes)],
+      '#options' => array_combine($this->schemes, $this->schemes),
     ];
     $form['request']['verify'] = [
       '#title' => $this->t('Verify SSL certificate'),
@@ -184,7 +184,7 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
       '#default_value' => $settings->verify,
       '#states' => [
         'visible' => [
-          ':input[name="scheme"]' => ['value' => array_search('https', $this->schemes)]
+          ':input[name="scheme"]' => ['value' => 'https'],
         ]
       ]
     ];
@@ -209,8 +209,8 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
       '#type' => 'details',
       '#group' => 'tabs',
       '#title' => $this->t('Headers'),
-      '#description' => $this->t('Configure the outbound HTTP headers, leave 
-      empty to delete. Example for Tag as Type: Cache-Tags for Header and 
+      '#description' => $this->t('Configure the outbound HTTP headers, leave
+      empty to delete. Example for Tag as Type: Cache-Tags for Header and
       [invalidation:expression] for Value.')
     ];
     $form['headers']['headers'] = [
@@ -470,15 +470,6 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
         }
       }
       $form_state->setValue('headers', $headers);
-    }
-
-    // Rewrite 'scheme' and 'request_method' to have the right CMI values.
-    if ($scheme = $form_state->getValue('scheme') && in_array($scheme, $this->request_methods)) {
-      $form_state->setValue('scheme', $scheme);
-    }
-
-    if ($method = $form_state->getValue('request_method') && in_array($method, $this->request_methods)) {
-      $form_state->setValue('request_method', $method);
     }
 
     // Iterate the config object and overwrite values found in the form state.
