@@ -45,7 +45,7 @@ function varnish_image_purge_entity_update(Drupal\Core\Entity\EntityInterface $e
       $file = File::load($entity->$field_image->getValue()[0]['target_id']);
       foreach ($styles as $style) {
         try {
-          $request = $client->request('IMAGEBAN', $style->buildUrl($file->getFileUri()));
+          $request = $client->request('URIBAN', $style->buildUrl($file->getFileUri()));
         }
         catch (Exception $e) {
           \Drupal::logger('varnish_image_purge')->error('URL not purged ' . $style->buildUrl($file->getFileUri()));
