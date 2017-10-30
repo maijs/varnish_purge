@@ -50,43 +50,39 @@ function varnish_image_purge_help($route_name, RouteMatchInterface $route_match)
  */
 function varnish_image_purge_entity_update(EntityInterface $entity) {
 
-  $purge = FALSE;
   $bundle = $entity->bundle();
-  $type = $entity->getEntityTypeId();
-  $entitymanager = \Drupal::service('entity_field.manager');
+  $entity_type = $entity->getEntityTypeId();
+  $entity_field_manager = \Drupal::service('entity_field.manager');
 
   $entity_types_to_purge = \Drupal::config('varnish_image_purge.configuration')
     ->get('entity_types');
 
-  // Get the name(s) of the varnish purge configs, they get random suffix.
-  // This is ugly, should be done better I guess.
-  $query = \Drupal::database()->select('config', 'c');
-  $query->fields('c', ['name']);
-  $query->condition('c.name', $query->escapeLike('varnish_purger.settings') . '%', 'LIKE');
-  $varnish_purgers = $query->execute()->fetchAllKeyed(0, 0);
+  if (empty($entity_types_to_purge) || (isset($entity_types_to_purge[$entity_type]) && in_array($bundle, $entity_types_to_purge[$entity_type]))) {
+    // Get the name(s) of the varnish purge configs, they get random suffix.
+    // This is ugly, should be done better I guess.
+    $query = \Drupal::database()->select('config', 'c');
+    $query->fields('c', ['name']);
+    $query->condition('c.name', $query->escapeLike('varnish_purger.settings') . '%', 'LIKE');
+    $varnish_purgers = $query->execute()->fetchAllKeyed(0, 0);
 
-  // Set the array to use for varnish purgers.
-  $purgers = [];
+    // Set the array to use for varnish purgers.
+    $purgers = [];
 
-  if (isset($varnish_purgers)) {
+    if (isset($varnish_purgers)) {
 
-    foreach ($varnish_purgers as $key => $value) {
-      $config_purge = \Drupal::config($key);
-      $purgers[$key]['hostname'] = $config_purge->get('hostname');
-      $purgers[$key]['port'] = $config_purge->get('port');
-    }
-    if (isset($entity_types_to_purge[$bundle]) || empty($entity_types_to_purge)) {
-      $purge = TRUE;
-    }
+      foreach ($varnish_purgers as $key => $value) {
+        $config_purge = \Drupal::config($key);
+        $purgers[$key]['hostname'] = $config_purge->get('hostname');
+        $purgers[$key]['port'] = $config_purge->get('port');
+      }
 
-    if ($purge === TRUE) {
       $class = \Drupal::entityTypeManager()
-        ->getDefinition($type)
+        ->getDefinition($entity_type)
         ->getOriginalClass();
       $interface = 'Drupal\Core\Entity\FieldableEntityInterface';
 
       if (in_array($interface, class_implements($class))) {
-        $field_definitions = $entitymanager->getFieldDefinitions($type, $bundle);
+        $field_definitions = $entity_field_manager->getFieldDefinitions($entity_type, $bundle);
         if (isset($field_definitions)) {
           $field_images = [];
           foreach ($field_definitions as $field_definition) {
