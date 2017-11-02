@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfo;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -79,6 +80,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('varnish_image_purge.configuration');
+    $entity_types = $config->get('entity_types');
 
     $content_entity_types = [];
     $entity_type_definitions = $this->entityTypeManager->getDefinitions();
@@ -99,12 +101,18 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
       $form['intro'] = [
         '#markup' => t('Configure bundles of entity types that Varnish image purge should be used for, if none selected, all bundles form all entity types will be used. Just the fields of type image will be purge.'),
       ];
+
+      $default_value = [];
+      if (!is_null($entity_types) && isset($entity_types[$content_entity_type->id()])) {
+        $default_value = $entity_types[$content_entity_type->id()];
+      }
+
       $form['entity_types'][$content_entity_type->id()] = [
         '#type' => 'checkboxes',
         '#title' => $content_entity_type->getLabel(),
         '#multiple' => TRUE,
         '#options' => $this->getOptionsFromEntity($content_entity_type),
-        '#default_value' => $config->get('entity_types')[$content_entity_type->id()],
+        '#default_value' => $default_value,
       ];
     }
 
