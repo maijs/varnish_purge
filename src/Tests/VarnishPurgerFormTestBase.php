@@ -65,20 +65,20 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     $form_state = $this->getFormStateInstance();
     $form_state->addBuildInfo('args', [$this->formArgs]);
     $form_state->setValues([
-        'connect_timeout' => 0.3,
-        'timeout' => 0.1,
-        'name' => 'foobar',
-      ]);
+      'connect_timeout' => 0.3,
+      'timeout' => 0.1,
+      'name' => 'foobar',
+    ]);
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
     $this->assertEqual(0, count($form_state->getErrors()));
     $form_state = $this->getFormStateInstance();
     $form_state->addBuildInfo('args', [$this->formArgs]);
     $form_state->setValues([
-        'connect_timeout' => 2.3,
-        'timeout' => 7.7,
-        'name' => 'foobar',
-      ]);
+      'connect_timeout' => 2.3,
+      'timeout' => 7.7,
+      'name' => 'foobar',
+    ]);
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
     $this->assertEqual(0, count($form_state->getErrors()));
@@ -86,10 +86,10 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     $form_state = $this->getFormStateInstance();
     $form_state->addBuildInfo('args', [$this->formArgs]);
     $form_state->setValues([
-        'connect_timeout' => 0.0,
-        'timeout' => 0.0,
-        'name' => 'foobar',
-      ]);
+      'connect_timeout' => 0.0,
+      'timeout' => 0.0,
+      'name' => 'foobar',
+    ]);
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
     $errors = $form_state->getErrors();
@@ -100,10 +100,10 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     $form_state = $this->getFormStateInstance();
     $form_state->addBuildInfo('args', [$this->formArgs]);
     $form_state->setValues([
-        'connect_timeout' => 2.4,
-        'timeout' => 7.7,
-        'name' => 'foobar',
-      ]);
+      'connect_timeout' => 2.4,
+      'timeout' => 7.7,
+      'name' => 'foobar',
+    ]);
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
     $errors = $form_state->getErrors();
