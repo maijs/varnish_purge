@@ -91,7 +91,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
     }
 
     if (empty($content_entity_types)) {
-      drupal_set_message($this->t('No content entities were found'));
+      $this->messenger()->addStatus($this->t('No content entities were found'));
       return NULL;
     }
 
