@@ -16,7 +16,7 @@ class CacheTagsTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp($switch_to_memory_queue = TRUE) {
     parent::setUp();
     $this->installSchema('system', ['router']);
     \Drupal::service('router.builder')->rebuild();
