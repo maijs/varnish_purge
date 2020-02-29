@@ -11,6 +11,7 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Entity\EntityInterface;
 use GuzzleHttp\Client;
 use Drupal\file\FileInterface;
+use Drupal\varnish_purger\Plugin\Purge\Purger\VarnishPurger;
 
 /**
  * Implements hook_help().
@@ -39,43 +40,65 @@ function varnish_focal_point_purge_help($route_name, RouteMatchInterface $route_
  * Implements hook_entity_update().
  */
 function varnish_focal_point_purge_entity_update(EntityInterface $entity) {
-
-  if ($entity->bundle() == 'focal_point') {
-    // Get the name(s) of the varnish purge configs, they get random suffix.
-    // This is ugly, should be done better I guess.
-    $query = \Drupal::database()->select('config', 'c');
-    $query->fields('c', ['name']);
-    $query->condition('c.name', $query->escapeLike('varnish_purger.settings') . '%', 'LIKE');
-    $varnish_purgers = $query->execute()->fetchAllKeyed(0, 0);
-
-    // Set the array to use for varnish purgers.
-    $purgers = [];
-
-    if (isset($varnish_purgers)) {
-
-      foreach ($varnish_purgers as $key => $value) {
-        $config_purge = \Drupal::config($key);
-        $purgers[$key]['hostname'] = $config_purge->get('hostname');
-        $purgers[$key]['port'] = $config_purge->get('port');
-      }
-
-      $client = new Client();
-      $styles = ImageStyle::loadMultiple();
-      $file = File::load($entity->entity_id->value);
-      if ($file instanceof FileInterface) {
-        foreach ($styles as $style) {
-          /* @var $style Drupal\image\Entity\ImageStyle; */
-          foreach ($purgers as $key => $value) {
-            try {
-              $request = $client->request('URIBAN', $style->buildUrl($file->getFileUri()));
-            }
-            catch (Exception $e) {
-              \Drupal::logger('varnish_focal_point_purge')
-                ->error('URL not purged ' . $style->buildUrl($file->getFileUri()) . $e->getMessage());
-            }
-          }
-        }
-      }
-    }
+  if ($entity->bundle() !== 'focal_point') {
+    return;
   }
+
+  // Get the name(s) of the varnish purge configs, they get random suffix.
+  // This is ugly, should be done better I guess.
+  $query = \Drupal::database()->select('config', 'c');
+  $query->fields('c', ['name']);
+  $query->condition('c.name', $query->escapeLike('varnish_purger.settings') . '%', 'LIKE');
+  $varnish_purgers = $query->execute()->fetchAllKeyed(0, 0);
+
+  // Set the array to use for varnish purgers.
+  $purgers = [];
+  foreach ($varnish_purgers as $key => $value) {
+    $config_purge = \Drupal::config($key);
+    $purgers[$key]['hostname'] = $config_purge->get('hostname');
+    $purgers[$key]['port'] = $config_purge->get('port');
+  }
+  if (empty($varnish_purgers)) {
+    return;
+  }
+
+  $file = File::load($entity->entity_id->value);
+  if (!($file instanceof FileInterface)) {
+    return;
+  }
+
+  // TODO: Consider are we not doing duplicated work related to varnish_image purge...
+  // Do the actual purging...
+  /* @var $client Client */
+  $client = \Drupal::service('http_client');
+
+  // Generator for purge requests to be sent out.
+  $requests = function() use ($client, $file) {
+    $styles = ImageStyle::loadMultiple();
+
+    /* @var $style Drupal\image\Entity\ImageStyle; */
+    foreach ($styles as $style) {
+      $url = $style->buildUrl($file->getFileUri());
+
+      yield function () use ($client, $url) {
+        return $client->requestAsync('URIBAN', $url)->then(
+          function() {
+          },
+          function($reason) use ($url) {
+            $message = $reason instanceof \Exception ? $reason->getMessage() : (string) $reason;
+
+            $logger = \Drupal::logger('varnish_focal_point_purge');
+            $logger->error("URL not purged $url {$message}");
+          }
+        );
+      };
+    }
+  };
+
+  // Prepare a POOL that will make the requests with a given concurrency.
+  // TODO: Have the concurrency exposed as configuration somewhere.
+  $concurrency = VarnishPurger::VARNISH_PURGE_CONCURRENCY;
+  (new \GuzzleHttp\Pool($client, $requests(), ['concurrency' => $concurrency]))
+    ->promise()
+    ->wait();
 }
