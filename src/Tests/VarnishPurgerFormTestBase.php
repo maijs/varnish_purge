@@ -71,7 +71,7 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     ]);
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
-    $this->assertEqual(0, count($form_state->getErrors()));
+    $this->assertEquals(0, count($form_state->getErrors()));
     $form_state = $this->getFormStateInstance();
     $form_state->addBuildInfo('args', [$this->formArgs]);
     $form_state->setValues([
@@ -81,7 +81,7 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     ]);
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
-    $this->assertEqual(0, count($form_state->getErrors()));
+    $this->assertEquals(0, count($form_state->getErrors()));
     // Submit timeout values that are too low and confirm the validation error.
     $form_state = $this->getFormStateInstance();
     $form_state->addBuildInfo('args', [$this->formArgs]);
@@ -93,7 +93,7 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
     $errors = $form_state->getErrors();
-    $this->assertEqual(2, count($errors));
+    $this->assertEquals(2, count($errors));
     $this->assertTrue(isset($errors['timeout']));
     $this->assertTrue(isset($errors['connect_timeout']));
     // Submit timeout values that are too high and confirm the validation error.
@@ -107,7 +107,7 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     $form = $this->getFormInstance();
     $this->formBuilder->submitForm($form, $form_state);
     $errors = $form_state->getErrors();
-    $this->assertEqual(2, count($errors));
+    $this->assertEquals(2, count($errors));
     $this->assertTrue(isset($errors['timeout']));
     $this->assertTrue(isset($errors['connect_timeout']));
   }
@@ -145,7 +145,7 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
     $form_state->addBuildInfo('args', [$this->formArgs]);
     $form_state->setValue('headers', [['field' => 'foo', 'value' => 'bar']]);
     $this->formBuilder->submitForm($form, $form_state);
-    $this->assertEqual(0, count($form_state->getErrors()));
+    $this->assertEquals(0, count($form_state->getErrors()));
     $this->drupalGet($this->route);
     $this->assertFieldById('edit-headers-0-field', 'foo');
     $this->assertFieldById('edit-headers-0-value', 'bar');

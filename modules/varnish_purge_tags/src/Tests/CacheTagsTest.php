@@ -28,8 +28,8 @@ class CacheTagsTest extends KernelTestBase {
   public function testHeaderValue() {
     $request = Request::create('/system/401');
     $response = $this->container->get('http_kernel')->handle($request);
-    $this->assertEqual(200, $response->getStatusCode());
-    $this->assertEqual($response->headers->get('Cache-Tags'), 'config:user.role.anonymous rendered');
+    $this->assertEquals(200, $response->getStatusCode());
+    $this->assertEquals($response->headers->get('Cache-Tags'), 'config:user.role.anonymous rendered');
   }
 
 }
