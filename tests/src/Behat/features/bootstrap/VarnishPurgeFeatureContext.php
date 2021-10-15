@@ -4,7 +4,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-
+use Drupal\node\Entity\Node;
 /**
  * Behat steps for testing the varnish_purger module.
  *
@@ -67,7 +67,7 @@ class VarnishPurgeFeatureContext extends RawDrupalContext implements SnippetAcce
    * @AfterScenario
    */
   public static function tearDown(\Behat\Testwork\Hook\Scope\AfterTestScope $scope) {
-    $nodes = node_load_multiple();
+    $nodes = Node::loadMultiple();
     foreach ($nodes as $node) {
       $node->delete();
     }
