@@ -67,6 +67,13 @@ sub vcl_init {
 sub vcl_recv {
   set req.backend_hint = drupal_hosts.backend();
 
+  # To enable URIBAN functionality for images, enable the varnish_image_purge module.
+  if (req.method == "URIBAN") {
+    ban("req.http.host == " + req.http.host + " && req.url == " + req.url);
+    # Throw a synthetic page so the request won't go to the backend.
+    return (synth(200, "Ban added."));
+  }
+
   # Only allow BAN requests from IP addresses in the 'purge' ACL.
   if (req.method == "BAN") {
     # Check against the ACLs.
