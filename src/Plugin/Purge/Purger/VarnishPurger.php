@@ -56,13 +56,13 @@ class VarnishPurger extends VarnishPurgerBase implements PurgerInterface {
               // Log as much useful information as we can.
               $headers = $options['headers'];
               unset($options['headers']);
-              $debug = json_encode(str_replace("\n", ' ', [
-                'msg' => $message,
+              $debug = json_encode([
+                'msg' => str_replace("\n", ' ', $message),
                 'uri' => $uri,
                 'method' => $this->settings->request_method,
                 'guzzle_opt' => $options,
                 'headers' => $headers,
-              ]));
+              ]);
               $logger->emergency("item failed due @e, details (JSON): @debug", [
                 '@e' => is_object($reason) ? get_class($reason) : (string) $reason,
                 '@debug' => $debug,

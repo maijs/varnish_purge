@@ -47,13 +47,13 @@ class VarnishBundledPurger extends VarnishPurgerBase implements PurgerInterface 
       // Log as much useful information as we can.
       $headers = $opt['headers'];
       unset($opt['headers']);
-      $debug = json_encode(str_replace("\n", ' ', [
-        'msg' => $e->getMessage(),
+      $debug = json_encode([
+        'msg' => str_replace("\n", ' ', $e->getMessage()),
         'uri' => $uri,
         'method' => $this->settings->request_method,
         'guzzle_opt' => $opt,
         'headers' => $headers,
-      ]));
+      ]);
       $this->logger()->emergency("item failed due @e, details (JSON): @debug",
         ['@e' => get_class($e), '@debug' => $debug]);
     }
