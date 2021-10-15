@@ -134,7 +134,7 @@ abstract class VarnishPurgerFormTestBase extends PurgerConfigFormTestBase {
       'max_requests' => 25,
       'http_errors' => 1,
     ];
-    $this->drupalPostForm($this->route, $edit, t('Save configuration'));
+    $this->drupalPostForm($this->route, $edit, $this->t('Save configuration'));
     $this->drupalGet($this->route);
     foreach ($edit as $field => $value) {
       $this->assertFieldById('edit-' . str_replace('_', '-', $field), $value);

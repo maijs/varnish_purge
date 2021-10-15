@@ -98,7 +98,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
     foreach ($content_entity_types as $content_entity_type) {
 
       $form['intro'] = [
-        '#markup' => t('Configure bundles of entity types that Varnish image purge should be used for, if none selected, all bundles form all entity types will be used. Just the fields of type image will be purge.'),
+        '#markup' => $this->t('Configure bundles of entity types that Varnish image purge should be used for, if none selected, all bundles form all entity types will be used. Just the fields of type image will be purge.'),
       ];
 
       $default_value = [];

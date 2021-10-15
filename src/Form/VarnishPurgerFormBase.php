@@ -237,7 +237,7 @@ abstract class VarnishPurgerFormBase extends PurgerConfigFormBase {
     $form['headers']['add'] = [
       '#type' => 'submit',
       '#name' => 'add',
-      '#value' => t('Add header'),
+      '#value' => $this->t('Add header'),
       '#submit' => [[$this, 'buildFormHeadersAdd']],
       '#ajax' => [
         'callback' => [$this, 'buildFormHeadersRebuild'],
