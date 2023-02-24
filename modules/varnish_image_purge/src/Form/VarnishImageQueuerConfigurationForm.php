@@ -97,7 +97,7 @@ class VarnishImageQueuerConfigurationForm extends QueuerConfigFormBase {
 
     foreach ($content_entity_types as $content_entity_type) {
       $form['intro'] = [
-        '#markup' => $this->t('Configure bundles of entity types that Varnish image purge should be used for, if none selected, all bundles form all entity types will be used. Just the fields of type image will be purge.'),
+        '#markup' => $this->t('Configure bundles of entity types that Varnish image purge should be used for. If none selected, all bundles form all entity types will be used. Just the fields of type image will be purged.'),
       ];
 
       $default_value = [];
