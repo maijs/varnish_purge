@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Varnish Image Purger.
  *
  * @PurgePurger(
- *   id = "varnishimage",
+ *   id = "varnish_image",
  *   label = @Translation("Varnish Image Purger"),
  *   configform = "\Drupal\varnish_image_purge\Form\VarnishImagePurgerForm",
  *   cooldown_time = 0.0,
