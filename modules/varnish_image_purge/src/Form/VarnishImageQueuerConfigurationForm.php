@@ -7,13 +7,13 @@ use Drupal\Core\Entity\ContentEntityType;
 use Drupal\Core\Entity\EntityTypeBundleInfo;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Form\ConfigFormBase;
+use Drupal\purge_ui\Form\QueuerConfigFormBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configure site information settings for this site.
  */
-class VarnishImagePurgeConfiguration extends ConfigFormBase {
+class VarnishImageQueuerConfigurationForm extends QueuerConfigFormBase {
 
   /**
    * Drupal\Core\Entity\EntityTypeManagerInterface definition.
@@ -96,7 +96,6 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
     }
 
     foreach ($content_entity_types as $content_entity_type) {
-
       $form['intro'] = [
         '#markup' => $this->t('Configure bundles of entity types that Varnish image purge should be used for, if none selected, all bundles form all entity types will be used. Just the fields of type image will be purge.'),
       ];
@@ -129,8 +128,7 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('varnish_image_purge.configuration');
+  public function submitFormSuccess(array &$form, FormStateInterface $form_state) {
     $values = [];
     foreach ($form_state->getValues() as $entity_type => $bundles) {
       if (is_array($bundles)) {
@@ -141,10 +139,10 @@ class VarnishImagePurgeConfiguration extends ConfigFormBase {
         }
       }
     }
-    $config->set('entity_types', $values);
-    $config->save();
 
-    parent::submitForm($form, $form_state);
+    $this->config('varnish_image_purge.configuration')
+      ->set('entity_types', $values)
+      ->save();
   }
 
   /**

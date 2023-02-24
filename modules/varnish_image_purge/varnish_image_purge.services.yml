@@ -1,0 +1,4 @@
+services:
+  varnish_image_purge.varnish_image_queuer:
+    class: Drupal\varnish_image_purge\VarnishImageQueuer
+    arguments: ['@config.factory', '@entity_field.manager', '@purge.invalidation.factory', '@purge.queuers', '@purge.queue']
